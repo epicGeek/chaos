@@ -1,0 +1,14 @@
+version: '3.1'
+services: 
+  dhss-pgw-log-task:
+    environment:
+      - TZ=Asia/Shanghai
+    image: openjdk:pgw-log-runtime-v1
+    container_name: dhss-pgw-log-task
+    volumes:
+      - "/home/docker_program/log/dhss-pgw-log-task/:/var/log/dhss-solution/dhss-pgw-log-task"
+      - "/home/docker_program/dhss-pgw-log-task/:/usr/local/dhss-solution/dhss-pgw-log-task/"
+      - "/etc/hosts:/etc/hosts"
+    working_dir: /usr/local/dhss-solution/dhss-pgw-log-task/
+    restart: always
+    command: java -jar dhss-pgw-log-task.jar dhss-pgw pgw-task

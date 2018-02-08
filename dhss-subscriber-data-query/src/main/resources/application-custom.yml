@@ -1,0 +1,11 @@
+spring:
+  dhss:
+    subscriber-data:
+      dhss-subscriber-base-dir: /usr/local/dhss-solution/dhss-subscriber-data-query
+      country-code: 86
+      mmc: 46
+      pgw-list:
+      - pgw-name: h2be2pgw01
+        ws-url: http://10.223.132.150:8089/ProvisioningGateway/services/SPMLSubscriber10Service?wsdl
+  jackson:
+    time-zone: Asia/Shanghai

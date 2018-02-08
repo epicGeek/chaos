@@ -1,0 +1,11 @@
+spring:
+  activemq:
+    broker-url: failover:(tcp://activemq.dhss.ices.io:61616)?startupMaxReconnectAttempts=30&maxReconnectAttempts=3 
+    pool:
+      enabled: true
+      max-connections: 10
+  dhss:
+    task:
+      app-name: DHSS
+      des-q-name: SYSTEM_EVENT_QUEUE
+  

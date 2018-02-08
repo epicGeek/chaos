@@ -1,0 +1,14 @@
+spring:
+  dhss:
+    security:
+      remote-base-url: http://app.system-manager.ices.io:8088/systeManager
+      validate-token-part-url: ssoValidToken?token={token}
+      resource-part-url: ssoGetAppSource?token={token}&assocResourceFlag={assocResourceFlag}&assocResourceAttr={assocResourceAttr}&assocResourceAttrValue={assocResourceAttrValue}&resourceFlag={resourceFlag}&contentFlag={contentFlag}
+      no-permission-resource-part-url: ssoGetAppSourceByNoPerssion?token={token}&resourceFlag={resourceFlag}&contentFlag={contentFlag}
+      access-token-part-url: ssoValidUser?username={username}&password={password}
+      edit-user-pwd-part-url: ssoUpdateUserPwd?token={token}&newPwd={newPwd}
+      remove-token-part-url: ssologout?token={token}
+      event-manager-data-part-url: ssoGetEventManagerData?token={token}&username={username}&starTime={starTime}&endTime={endTime}&appName={appName}
+      after-ldap-auth-part-url: ssoValidUserByUserName?username={username}
+      menu-check-url: ssoCheckMenuValidByToken?token={token}&menuFlag={menuFlag}
+      license-check-url: ssoValidLicense?projectName={projectName}&functionName={functionName}&proviceName={proviceName}&cityName={cityName}&serviceName={serviceName}

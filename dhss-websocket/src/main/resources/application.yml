@@ -1,0 +1,33 @@
+debug: true
+spring:
+  profiles:
+    active: 
+      - development
+      - security
+  datasource:
+    tomcat:
+      default-auto-commit: true
+      validation-interval: 1000
+      validation-query: /* ping */ SELECT 1
+      test-on-borrow: true
+      test-while-idle: true
+      time-between-eviction-runs-millis: 3600000
+      min-evictable-idle-time-millis: 600000
+  jpa:
+    hibernate:
+      ddl-auto: update
+      naming:
+        physical-strategy: org.springframework.boot.orm.jpa.hibernate.SpringPhysicalNamingStrategy 
+  data:
+    rest:
+      base-path: /api/v1
+      default-page-size: 15
+  dao:
+    exceptiontranslation:
+      enabled: true
+  freemarker:
+    cache: false
+dhss:
+  one-click-access:
+    interface-type-resource-name: dhss_web_template
+    

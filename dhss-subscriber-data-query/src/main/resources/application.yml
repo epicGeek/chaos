@@ -1,0 +1,44 @@
+server:
+  port: 8092
+spring:
+  datasource:
+      driver-class-name: org.mariadb.jdbc.Driver
+      url: jdbc:mysql://database.dhss.ices.io:3306/dhss?characterEncoding=UTF-8
+      username: root
+      password: root
+  jpa:
+    hibernate:
+      ddl-auto: update
+      naming:
+        strategy: org.springframework.boot.orm.jpa.hibernate.SpringNamingStrategy
+  dhss:
+    subscriber-data:
+      release-version: alpha
+#      dhss-subscriber-base-dir: /usr/local/dhss-solution/dhss-subscriber-data-query/
+      dhss-subscriber-base-dir: E:/batch-user/
+      xml-analysis-file-template-abs-path: config/subscriber_data_value_mapping.xml
+      download-excel-abs-path: config/batchTemplate.xls
+      subscriber-batch-analysis-template-abs-path: user_batch.xml
+      single-query-response-xml-dir: single-query/
+      multi-excel-file-save-dir: batch-user/
+      upload-analysis-template-dir: single-query/
+      country-code: 86
+      mmc: 46
+      pgw-list:
+      - pgw-name: h2be2pgw01
+        ws-url: http://10.223.132.150:8089/ProvisioningGateway/services/SPMLSubscriber10Service?wsdl
+      search-limit: 10000
+      #test-files-path: /var/subscriber-test/singles
+      test-files-path: E:/batch-user/test/
+      analyze-mode: dom
+      show-soap-log: true
+      taskpool:
+        core-pool-size: 4
+        max-pool-size: 10
+        keep-alive-seconds: 10
+        queue-capacity: 10
+  jackson:
+    time-zone: Asia/Shanghai
+    date-format: yyyy-MM-dd HH:mm:ss
+    joda-date-time-format: yyyy-MM-dd HH:mm:ss
+

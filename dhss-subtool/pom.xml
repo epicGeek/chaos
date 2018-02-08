@@ -1,0 +1,44 @@
+<?xml version="1.0"?>
+<project xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd" xmlns="http://maven.apache.org/POM/4.0.0"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <modelVersion>4.0.0</modelVersion>
+  <parent>
+    <groupId>com.nokia</groupId>
+    <artifactId>dhss-all</artifactId>
+    <version>0.0.1-SNAPSHOT</version>
+  </parent>
+  <artifactId>dhss-subtool</artifactId>
+  <properties>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+  </properties>
+  <dependencies>
+       <dependency>
+			<groupId>com.nokia</groupId>
+			<artifactId>dhss-core</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		 <dependency>
+			<groupId>com.nokia</groupId>
+			<artifactId>dhss-business-domain</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		 <dependency>
+			<groupId>com.nokia</groupId>
+			<artifactId>dhss-jms</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<!--  <dependency>
+			<groupId>com.nokia</groupId>
+			<artifactId>dhss-config</artifactId>
+			<version>${project.version}</version>
+		</dependency> -->
+		<dependency>
+		    <groupId>wsdl4j</groupId>
+		    <artifactId>wsdl4j</artifactId>
+		</dependency>
+		<dependency>
+		    <groupId>org.apache.httpcomponents</groupId>
+		    <artifactId>httpclient</artifactId>
+		</dependency>
+  </dependencies>
+</project> 

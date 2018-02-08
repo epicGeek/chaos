@@ -1,0 +1,81 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!--用户自定义用户数据解析规则,以及配置说明
+每个标签表示一个需要导出的内容，标签的名称即列名，每个标签里有下列属性：
+	path： 需获取内容在用户数据xml文件中的路径，必须包含的内容
+	showType: 如果内容是数字而结果希望以文本的类型输出，则使用showType='text'属性定义
+	zhName： 将列名标准化，如果没有这个属性则直接使用标签名
+	
+	如果已定义的内容里还有子元素，则用element表示要获取的子元素的内容，如果不定义则不输出
+	如果element的标签里有valueDes属性，则表示需要将结果进行转换，即列出每个可能的值对应的输出，值和输出之间用分号“：”区分，每对转换之间用“，”分割
+	
+	如果已定义的内容在xml文件里有多个相同的结果，则多个结果同时输出，以逗号分割
+	如果在规则中定义了包含include标签，则表示可以在多个结果中进行过滤，只输出满足条件的结果，
+	property属性定义的是过滤的子元素项，include中包含的内容为过滤项需满足的条件
+
+
+-->
+<userBatch>
+
+        <msisdn showType='text' zhName='MSISDN' path='/objects/hlr/ts11/msisdn' />
+          
+	    <imsi showType='text' zhName='IMSI' path='/objects/auc/imsi' />
+
+        <imsiActive zhName='imsi Active' path='/objects/hlr/imsiActive' />   
+
+        <routingCategory showType='text' zhName='ROU' path='/objects/hlr/routingCategory' />
+
+        <routingCategoryExtension showType='text' zhName='ADDROU' path='/objects/hlr/routingCategoryExtension' />
+
+        <chargingCharacteristics showType='text' zhName='CC' path='/objects/hlr/generalChargingCharacteristics/chargingCharacteristicsProfile' />
+     
+	    <vlrNumber showType='text' zhName='VLR Number' path='/objects/hlr/vlrMobData/isdnNumberOfVLR' />
+	
+        <locUpdateCSTimestamp showType='text' zhName='locUpdate Timestamp CS' path='/objects/hlr/vlrMobData/locUpdateCSTimestamp' />
+		
+		<msPurgedvlr zhName='msPurged by VLR' path='/objects/hlr/vlrMobData/msPurged' />
+
+        <sgsnNumber showType='text' zhName='SGSN Number' path='/objects/hlr/sgsnMobData/isdnNumberOfSGSN' />
+
+        <locUpdatePSTimestamp showType='text' zhName='locUpdate Timestamp PS' path='/objects/hlr/sgsnMobData/locUpdatePSTimestamp' />
+
+	    <msPurgedsgsn zhName='msPurged by SGSN' path='/objects/hlr/sgsnMobData/msPurged' />
+		
+        <pdpContext zhName='pdp Context APN' path='/objects/hlr/pdpContext/apn' />
+
+        <mmeIdentity zhName='MME ID' path='/objects/hlr/eps/mmeIdentity' />
+
+        <locUpdateTimestamp showType='text' zhName='locUpdate Timestamp EPS' path='/objects/hlr/eps/locUpdateTimestamp' />
+		
+		<msPurgedmme zhName='msPurged by MME' path='/objects/hlr/eps/msPurgedEps' />
+
+        <epsPdnContext zhName='epsPdn Context APN' path='/objects/hlr/epsPdnContext/apn' />
+		
+		<maxBandwidthUp zhName='UE-AMBR UP' path='/objects/hlr/eps/maxBandwidthUp' />
+		
+		<maxBandwidthDown zhName='UE-AMBR DL' path='/objects/hlr/eps/maxBandwidthDown' />
+		
+        <plmnStatus zhName='plmn status' path='/objects/hlr/eps/plmnStatus' />
+
+        <scscfSipAddress zhName='SCSCF SIP Address' path='/objects/hss/scscfSipAddress' />
+
+	    <registrationStatus zhName='Registration Status' path='/objects/hss/implicitRegisteredSet/registrationStatus' />
+	
+        <tcsioperatorServiceName zhName='tcsi' path='/objects/hlr/tcsi/operatorServiceName' />
+
+        <vtscioperatorServiceName zhName='vtsi' path='/objects/hlr/vtcsi/operatorServiceName' />
+	
+        <odboc zhName='odboc' valueDes='0:NONE,1:BAOC,2:BOIC,3:BOIH,4:BORO' path='/objects/hlr/odboc' />
+	
+        <odbic zhName='odbic' valueDes='0:NONE,1:BAIC,2:BIRO' path='/objects/hlr/odbic'/>
+        
+        <obGprs zhName='3G data service' valueDes='0:GRANTED,1:DENIED' path='/objects/hlr/obGprs' /> 
+
+        <odbgprs zhName='GPRS SERVICE AREA' valueDes='0:ALL,1:OWN' path='/objects/hlr/odbgprs' />   
+
+        <odbPOAccessEps zhName='4G data service' valueDes='NONE:GRANTED,ALLPOS:DENIED' path='/objects/hlr/eps/odbPOAccessEps' /> 
+
+                
+		<epsRoamAreaName zhName='EPS SERVICE AREA' path='/objects/hlr/epsRoamAreaName' />
+		
+
+</userBatch>

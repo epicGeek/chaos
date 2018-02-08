@@ -1,0 +1,24 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<groupId>com.nokia</groupId>
+		<artifactId>dhss-all</artifactId>
+		<version>0.0.1-SNAPSHOT</version>
+	</parent>
+	<artifactId>dhss-web-security-dummy</artifactId>
+	<name>dhss-web-security-dummy</name>
+	<description>dhss-web-security-dummy</description>
+	<dependencies>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-context</artifactId>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>com.nokia</groupId>
+			<artifactId>dhss-web-security</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+	</dependencies>
+</project>

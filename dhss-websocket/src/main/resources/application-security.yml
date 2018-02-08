@@ -1,0 +1,13 @@
+spring:
+  dhss:
+    security:
+      validate-token-url: http://202.106.93.73/systeManager/ssoValidToken?token={token}
+      resource-url: http://202.106.93.73/systeManager/ssoGetAppSource?token={token}&assocResourceFlag={assocResourceFlag}&assocResourceAttr={assocResourceAttr}&assocResourceAttrValue={assocResourceAttrValue}&resourceFlag={resourceFlag}&contentFlag={contentFlag}
+      no-perssion-resource-url: http://202.106.93.73/systeManager/ssoGetAppSourceByNoPerssion?token={token}&resourceFlag={resourceFlag}&contentFlag={contentFlag}
+      access-token-url: http://202.106.93.73/systeManager/ssoValidUser?username={username}&password={password}
+      edit-user-pwd: http://202.106.93.73/systeManager/ssoUpdateUserPwd?token={token}&newPwd={newPwd}
+      remove-token-url: http://202.106.93.73/systeManager/ssoRemoveToken?token={token}
+      token-protected-path:
+        - 
+      access-token-header:
+        - 

@@ -1,0 +1,238 @@
+version: '3.1'
+
+services:
+############################# DB ############################
+  dhss-database:
+    image: mariadb:10.3.0
+    volumes: 
+      - "/root/dhss-solution/GR1/dhss-database/dhss/data:/var/lib/mysql"
+    container_name: dhss-database
+    restart: always
+    environment:
+      - MYSQL_ROOT_PASSWORD=root
+      - MYSQL_DATABASE=dhss
+      - TZ=Asia/Shanghai
+    ports:
+        - "3306:3306"
+  dhss-report-database:
+    image: mariadb:10.3.0
+    volumes: 
+      - "/root/dhss-solution/GR1/dhss-database/report/data:/var/lib/mysql"
+    container_name: dhss-report-database
+    restart: always
+    environment:
+      - MYSQL_ROOT_PASSWORD=root
+      - MYSQL_DATABASE=report
+      - TZ=Asia/Shanghai
+    ports:
+        - "3308:3306"
+  dhss-pgw-log-database:
+    image: mariadb:10.3.0
+    volumes: 
+      - "/root/dhss-solution/GR1/dhss-database/pgw-log/data:/var/lib/mysql"
+    container_name: dhss-pgw-log-database
+    restart: always
+    environment:
+      - MYSQL_ROOT_PASSWORD=root
+      - MYSQL_DATABASE=pgw_log
+      - TZ=Asia/Shanghai
+    ports:
+        - "3310:3306"
+  ############################# DHSS Web services ############################        
+  dhss-site:
+    image: nginx:1.13.5-alpine
+    ports:
+      - "1080:80"
+    container_name: dhss-site
+    volumes:
+      - /root/dhss-solution/GR1/dhss-site/:/usr/share/nginx/html
+    environment:
+      - TZ=Asia/Shanghai
+  dhss-web:
+    environment:
+      - TZ=Asia/Shanghai
+    image: openjdk:8u141-jre-slim
+    ports:
+     - "8080:8080"
+    container_name: dhss-web
+    links:
+      - dhss-database:database.dhss.ices.io
+    extra_hosts:
+      - "activemq.dhss.ices.io:172.16.73.240"
+      - "app.system-manager.ices.io:172.16.73.222"
+    volumes: 
+      - "/root/dhss-solution/GR1/log/dhss-web/:/var/log/dhss-solution/dhss-web/"
+      - "/root/dhss-solution/GR1/dhss-web/:/usr/local/dhss-solution/dhss-web/"
+    working_dir: /usr/local/dhss-solution/dhss-web/
+    restart: always
+    command: java -jar dhss-web.jar 
+
+  dhss-web-topology:
+    environment:
+      - TZ=Asia/Shanghai
+    image: openjdk:8u141-jre-slim
+    ports:
+     - "8082:8080"
+    container_name: dhss-web-topology
+    links:
+      - dhss-database:database.dhss.ices.io
+    extra_hosts:
+      - "app.system-manager.ices.io:172.16.73.222"
+    volumes: 
+      - "/root/dhss-solution/GR1/log/dhss-web-topology/:/var/log/dhss-solution/dhss-web-topology/"
+      - "/root/dhss-solution/GR1/dhss-web-topology/:/usr/local/dhss-solution/dhss-web-topology/"
+    working_dir: /usr/local/dhss-solution/dhss-web-topology/
+    restart: always
+    command: java -jar dhss-web-topology.jar
+
+    
+  dhss-one-click-access:
+    environment:
+      - TZ=Asia/Shanghai
+    image: openjdk:8u141-jre-remote
+    ports:
+     - "8084:8080"
+    container_name: dhss-one-click-access
+    links:
+      - dhss-database:database.dhss.ices.io
+    volumes: 
+      - "/root/dhss-solution/GR1/log/dhss-one-click-access/:/var/log/dhss-solution/dhss-one-click-access/"
+      - "/root/dhss-solution/GR1/dhss-one-click-access/:/usr/local/dhss-solution/dhss-one-click-access/"
+    working_dir: /usr/local/dhss-solution/dhss-one-click-access/
+    restart: always
+    command: java -jar dhss-one-click-access.jar
+
+  dhss-report:
+    environment:
+      - TZ=Asia/Shanghai
+    image: openjdk:8u141-jre-slim
+    ports:
+     - "8086:8080"
+    container_name: dhss-report
+    links:
+      - dhss-database:database.dhss.ices.io
+      - dhss-report-database:database.report.dhss.ices.io
+    volumes: 
+      - "/root/dhss-solution/GR1/log/dhss-report/:/var/log/dhss-solution/dhss-report/"
+      - "/root/dhss-solution/GR1/dhss-report/:/usr/local/dhss-solution/dhss-report/"
+    working_dir: /usr/local/dhss-solution/dhss-report/
+    command: java -jar dhss-report.jar    
+    
+  dhss-pgw-log-data-query:
+    environment:
+      - TZ=Asia/Shanghai
+    image: openjdk:8u141-jre-slim
+    container_name: dhss-pgw-log-data-query
+    ports:
+      - "8090:8080"
+    links:
+      - dhss-pgw-log-database:database.pgw.dhss.ices.io
+    extra_hosts:
+      - "activemq.dhss.ices.io:172.16.73.240"
+    volumes: 
+      - "/root/dhss-solution/GR1/log/dhss-pgw-log-data-query/:/var/log/dhss-solution/dhss-pgw-log-data-query/"
+      - "/root/dhss-solution/GR1/dhss-pgw-log-data-query/:/usr/local/dhss-solution/dhss-pgw-log-data-query/"
+    working_dir: /usr/local/dhss-solution/dhss-pgw-log-data-query/
+    restart: always
+    command: java -jar dhss-pgw-log-data-query.jar    
+    
+  dhss-subscriber-data-query:
+    environment:
+      - TZ=Asia/Shanghai
+    image: openjdk:8u141-jre-slim
+    container_name: dhss-subscriber-data-query
+    ports:
+      - "8092:8080"
+    links: 
+      - dhss-database:database.dhss.ices.io
+    volumes: 
+      - "/root/dhss-solution/GR1/log/dhss-subscriber-data-query/:/var/log/dhss-solution/dhss-subscriber-data-query/"
+      - "/root/dhss-solution/GR1/dhss-subscriber-data-query/:/usr/local/dhss-solution/dhss-subscriber-data-query/"
+    working_dir: /usr/local/dhss-solution/dhss-subscriber-data-query/
+    restart: always
+    command: java -jar dhss-subscriber-data-query.jar
+    
+  dhss-log-proxy:
+    environment:
+      - TZ=Asia/Shanghai
+    image: openjdk:8u141-jre-slim
+    container_name: dhss-log-proxy
+    ports:
+      - "8094:8080"
+    extra_hosts:
+      - "activemq.dhss.ices.io:172.16.73.240"
+    volumes: 
+      - "/root/dhss-solution/GR1/log/dhss-log-proxy/:/var/log/dhss-solution/dhss-log-proxy/"
+      - "/root/dhss-solution/GR1/dhss-log-proxy/:/usr/local/dhss-solution/dhss-log-proxy/"
+    working_dir: /usr/local/dhss-solution/dhss-log-proxy/
+    restart: always
+    command: java -jar dhss-log-proxy.jar 
+
+  ices-alarm-dhss:
+    environment:
+      - TZ=Asia/Shanghai
+    image: openjdk:7u151-jre-slim
+    container_name: ices-alarm-dhss
+    links: 
+      - dhss-database:database.dhss.ices.io
+    depends_on:
+      - dhss-web
+      - dhss-database
+    ports: 
+      - 7892:7892
+    volumes: 
+      - "/root/dhss-solution/GR1/log/ices-alarm-dhss/:/var/log/dhss-solution/ices-alarm-dhss/"
+      - "/root/dhss-solution/GR1/ices-alarm-dhss/:/usr/local/dhss-solution/ices-alarm-dhss/"    
+    working_dir: /usr/local/dhss-solution/ices-alarm-dhss/
+    command: java -jar ices-alarm-dhss.jar
+       
+  ############################# DHSS Scheduled tasks ############################     
+  dhss-kpi-task:
+    environment:
+      - TZ=Asia/Shanghai
+    image: openjdk:8u141-jre-slim
+    container_name: dhss-kpi-task
+    links: 
+      - dhss-database:database.dhss.ices.io
+    extra_hosts:
+      - "database.omc.ices.io:172.16.73.121"
+      - "activemq.dhss.ices.io:172.16.73.240"
+    volumes: 
+      - "/root/dhss-solution/GR1/log/dhss-kpi-task/:/var/log/dhss-solution/dhss-kpi-task/"
+      - "/root/dhss-solution/GR1/dhss-kpi-task/:/usr/local/dhss-solution/dhss-kpi-task/"
+    working_dir: /usr/local/dhss-solution/dhss-kpi-task/
+    restart: always
+    command: java -jar dhss-kpi-task.jar DHSSKPI DHSSKPI
+
+  dhss-pgw-log-task:
+    environment:
+      - TZ=Asia/Shanghai
+    image: openjdk:8u141-jre-remote
+    container_name: dhss-pgw-log-task
+    links:
+      - dhss-pgw-log-database:database.pgw.dhss.ices.io
+    extra_hosts:
+      - "activemq.dhss.ices.io:172.16.73.240"
+    volumes: 
+      - "/root/dhss-solution/GR1/log/dhss-pgw-log-task/:/var/log/dhss-solution/dhss-pgw-log-task/"
+      - "/root/dhss-solution/GR1/dhss-pgw-log-task/:/usr/local/dhss-solution/dhss-pgw-log-task/"  
+    working_dir: /usr/local/dhss-solution/dhss-pgw-log-task/
+    restart: always
+    command: java -jar dhss-pgw-log-task.jar DHSSPGW DHSSPGW
+
+  dhss-smart-task:
+    environment:
+      - TZ=Asia/Shanghai
+    image: openjdk:8u141-jre-slim
+    container_name: dhss-smart-task
+    links:
+      - dhss-database:database.dhss.ices.io
+    extra_hosts:
+      - activemq.dhss.ices.io:172.16.73.240
+    volumes: 
+      - "/root/dhss-solution/GR1/log/dhss-smart-task/:/var/log/dhss-solution/dhss-smart-task/"
+      - "/root/dhss-solution/GR1/dhss-smart-task/:/usr/local/dhss-solution/dhss-smart-task/"
+    working_dir: /usr/local/dhss-solution/dhss-smart-task/
+    restart: always
+    command: java -jar dhss-smart-task.jar dhsssmarttask smarttask
+

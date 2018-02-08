@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>  
+<configuration>  
+   
+   <property name="LOG_HOME" value="logs" />
+    <property name="MODULE_NAME" value="neLog" />
+
+    <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+        <!--  <filter class="ch.qos.logback.core.filter.EvaluatorFilter"> 
+            <evaluator name="myEval_service">
+                <expression>message.contains("str")</expression>
+            </evaluator>  
+            <onMatch>ACCEPT</onMatch>  
+            <onMismatch>DENY</onMismatch>
+        </filter> -->
+        <encoder>
+            <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} [ %contextName ] - [%thread] %-5level %logger{5}:%L - %msg%n</pattern>
+        </encoder>
+    </appender>
+
+
+	<appender name="LOG_FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<file>${MODULE_NAME}.log</file>
+		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+			<fileNamePattern>${LOG_HOME}/${MODULE_NAME}-%d{yyyy-MM-dd}.zip</fileNamePattern>
+            <MaxHistory>30</MaxHistory>  
+		</rollingPolicy>
+		
+		<triggeringPolicy
+			class="ch.qos.logback.core.rolling.SizeBasedTriggeringPolicy">
+			<maxFileSize>10MB</maxFileSize>
+		</triggeringPolicy>
+		<encoder>
+			<pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} [ %contextName ] - [%thread] %-5level %logger{5}:%L - %msg%n</pattern>
+		</encoder>
+	</appender>
+    
+   <!--  <appender name="jms_service" class="ch.qos.logback.classic.net.JMSQueueAppender">  
+        <InitialContextFactoryName>  
+            org.apache.activemq.jndi.ActiveMQInitialContextFactory  
+        </InitialContextFactoryName>  
+        <ProviderURL>tcp://127.0.0.1:61616</ProviderURL>  
+        <filter class="ch.qos.logback.core.filter.EvaluatorFilter"> 
+            <evaluator name="myEval_service">
+                <expression>message.contains("str")</expression>
+            </evaluator>  
+            <onMatch>ACCEPT</onMatch>  
+            <onMismatch>DENY</onMismatch>
+        </filter>
+        <QueueConnectionFactoryBindingName>ConnectionFactory</QueueConnectionFactoryBindingName>  
+        <QueueBindingName>SYSTEM_MANAGER_QUEUE</QueueBindingName>
+    </appender> -->
+    
+    <logger name="com.nokia.ices.apps.dhss.neLog">
+		<level value="DEBUG" />
+	</logger>
+	
+    <root>  
+        <level value="DEBUG" />
+        <appender-ref ref="STDOUT" />
+		 <appender-ref ref="LOG_FILE" />
+        <!--<appender-ref ref="jms_service" />-->
+    </root>  
+</configuration>  

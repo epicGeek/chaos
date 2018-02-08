@@ -1,0 +1,6 @@
+spring:
+   dhss:
+     pgw:
+       mmc: 466
+       country-code: 886
+       not-standard-country-code: '09'

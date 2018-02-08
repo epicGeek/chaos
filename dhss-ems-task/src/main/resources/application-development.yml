@@ -1,0 +1,23 @@
+debug: true
+spring:
+  profiles: development
+  datasource:
+    driver-class-name: com.mysql.jdbc.Driver
+    url: jdbc:mysql://127.0.0.1:3306/new_dhss?characterEncoding=UTF-8
+    username: root
+    password: root
+  jpa:
+    generate-ddl: true
+    hibernate:
+      ddl-auto: update
+  activemq:
+      broker-url: failover:(tcp://127.0.0.1:61616)?startupMaxReconnectAttempts=30&maxReconnectAttempts=3 
+  dhss:
+      task:
+          desQName: smart-task-cmd-consumer
+          scriptServerName: script-server
+          basePath: c://
+          smsName: test
+banner:
+  location: development.txt
+  

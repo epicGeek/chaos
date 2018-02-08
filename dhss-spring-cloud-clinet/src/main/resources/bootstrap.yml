@@ -1,0 +1,8 @@
+spring:
+  application:
+    name: application,t
+  cloud:
+      config:
+        profile: dev,test
+        uri: ${SPRING_CONFIG_URI:http://localhost:8989}
+        fail-fast: true

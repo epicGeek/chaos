@@ -1,0 +1,135 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>com.nokia</groupId>
+	<artifactId>dhss-all</artifactId>
+	<version>0.0.1-SNAPSHOT</version>
+	<packaging>pom</packaging>
+	<name>dhss-all</name>
+	<description>DHSS3 with New Framework</description>
+	<properties>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+		<java.version>1.8</java.version>
+		<docker.image.prefix>dhss-solution</docker.image.prefix>
+	</properties>
+	<parent>
+		<groupId>org.springframework.boot</groupId>
+		<artifactId>spring-boot-starter-parent</artifactId>
+		<version>1.5.6.RELEASE</version>
+		<relativePath /> <!-- lookup parent from repository -->
+	</parent>
+
+	<distributionManagement>
+		<repository>
+			<id>releases</id>
+			<name>Internal-Releases</name>
+			<url>http://maven.ices.io/nexus/content/repositories/releases/</url>
+		</repository>
+		<snapshotRepository>
+			<id>snapshots</id>
+			<name>Internal-Snapshots</name>
+			<url>http://maven.ices.io/nexus/content/repositories/maven-snapshots/</url>
+		</snapshotRepository>
+	</distributionManagement>
+	<repositories>
+		<repository>
+			<id>nexus3</id>
+			<url>http://maven.ices.io/nexus/content/groups/public/</url>
+			<releases>
+				<enabled>true</enabled>
+			</releases>
+			<snapshots>
+				<enabled>true</enabled>
+			</snapshots>
+		</repository>
+	</repositories>
+	<pluginRepositories>
+		<pluginRepository>
+			<id>nexus3</id>
+			<url>http://maven.ices.io/nexus/content/groups/public/</url>
+			<releases>
+				<enabled>true</enabled>
+			</releases>
+			<snapshots>
+				<enabled>true</enabled>
+			</snapshots>
+		</pluginRepository>
+	</pluginRepositories>
+	<modules>
+		<module>dhss-core</module>
+		<module>dhss-jpa-based-deps</module>
+		<module>dhss-jms</module>
+		<module>dhss-config</module>
+		<module>dhss-system-domain</module>
+		<module>dhss-business-domain</module>
+		<module>dhss-ne-manage</module>
+		<module>dhss-command-manage</module>
+		<module>dhss-alarm</module>
+		<module>dhss-home</module>
+		<module>dhss-kpi</module>
+		<module>dhss-kpi-domain</module>
+		<module>dhss-system-operation-log</module>
+		<module>dhss-smart</module>
+		<module>dhss-maintain</module>
+		<module>dhss-number-manage</module>
+		<module>dhss-web-security</module>
+		<module>dhss-web-security-dummy</module>
+		<module>dhss-web-security-remote</module>
+		<module>dhss-legacy-domain</module>
+		<module>dhss-subscriber-manage</module>
+
+		<!-- release jars -->
+		<module>dhss-web</module>
+		<module>dhss-web-topology</module>
+		<module>dhss-one-click-access</module>
+		<module>dhss-smart-task</module>
+		<module>dhss-report</module>
+		<module>dhss-kpi-task</module>
+		<module>dhss-log-proxy</module>
+		<module>dhss-pgw-log-data-query</module>
+		<module>dhss-pgw-log-task</module>
+		<module>dhss-subscriber-data-query</module>
+		<module>dhss-boss-es-query</module>
+
+		<!--
+		<module>dhss-spring-cloud</module>
+		<module>dhss-spring-cloud-test</module>
+		<module>dhss-spring-cloud-clinet</module>
+		-->
+
+		<!-- <module>dhss-spring-cloud</module>
+		<module>dhss-spring-cloud-test</module>
+		<module>dhss-spring-cloud-clinet</module> -->
+
+	</modules>
+	<scm>
+		<url>scm:git:https://gitlab.ices.io/dhss/dhss-all.git</url>
+	</scm>
+	<build>
+		<plugins>
+			<plugin>
+				<artifactId>maven-resources-plugin</artifactId>
+				<executions>
+					<execution>
+						<id>copy-resources</id>
+						<!-- here the phase you need -->
+						<phase>validate</phase>
+						<goals>
+							<goal>copy-resources</goal>
+						</goals>
+						<configuration>
+							<outputDirectory>${basedir}/target/extra-resources</outputDirectory>
+							<resources>
+								<resource>
+									<directory>src/non-packaged-resources</directory>
+									<filtering>true</filtering>
+								</resource>
+							</resources>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+		</plugins>
+	</build>
+</project>

@@ -1,0 +1,48 @@
+
+<Configuration status="warn" name="MyApp">
+	<Appenders>
+		<!-- logger -->
+		<JMS name="jmsQueue"
+		    factoryBindingName="ConnectionFactory"
+			factoryName="org.apache.activemq.jndi.ActiveMQInitialContextFactory"
+			providerUrl="tcp://activemq.dhss.ices.io:61616"
+			queueBindingName="SYSTEM_MANAGER_QUEUE" />
+
+		<!-- 日志的控制台输出配置 -->
+		<Console name="Console" target="SYSTEM_OUT">
+			<PatternLayout pattern="%d{yyyy-MM-dd HH:mm:ss} [%t] %-5p %c{1}:%L - %msg%n" />
+		</Console>
+		<!-- 日志的滚动输出配置 -->
+		<!-- <RollingFile name="RollingFile" filename="log/uc.log" -->
+		<!-- filepattern="log/%d{yyyyMMddHHmmss}-uc.log"> -->
+		<!-- <PatternLayout pattern="%d{yyyy-MM-dd HH:mm:ss} [%t] %-5p %c{1}:%L 
+			- %msg%n" /> -->
+		<!-- <Policies> -->
+		<!-- 控制滚动文件大小 -->
+		<!-- <SizeBasedTriggeringPolicy size="10MB" /> -->
+		<!-- </Policies> -->
+		<!-- <DefaultRolloverStrategy max="20" /> -->
+		<!-- </RollingFile> -->
+
+		<!-- 日志按天输出配置 -->
+		<RollingFile name="RollingFile" fileName="/var/log/dhss-solution/dhss-smart-task/dhss-smart-task.log"
+			filePattern="/var/log/dhss-solution/dhss-smart-task/dhss-smart-task.%d{yyyy-MM-dd}.gz">
+			<PatternLayout pattern="%-d{yyyy-MM-dd HH:mm:ss} [%thread] %m%n" />
+			<Policies>
+				<TimeBasedTriggeringPolicy modulate="true"
+					interval="1" />
+			</Policies>
+		</RollingFile>
+	</Appenders>
+
+
+	<Loggers>
+		<Root level="info">
+			<AppenderRef ref="RollingFile" />
+			<AppenderRef ref="jmsQueue" />
+		</Root>
+		<Logger name="com.nokia.*" level="debug" additivity="false">
+			<AppenderRef ref="RollingFile" />
+		</Logger>
+	</Loggers>
+</Configuration>

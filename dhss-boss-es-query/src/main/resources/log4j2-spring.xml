@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration status="warn" name="MyApp">
+	<CustomLevels>
+		<CustomLevel name="EVENT" intLevel="350" />
+		<CustomLevel name="NOTICE" intLevel="450" />
+		<CustomLevel name="VERBOSE" intLevel="550" />
+	</CustomLevels>
+	<Appenders>
+		<!-- logger -->
+		<!-- <JMS name="jmsQueue" factoryBindingName="ConnectionFactory" factoryName="org.apache.activemq.jndi.ActiveMQInitialContextFactory" 
+			providerUrl="tcp://127.0.0.1:61616" queueBindingName="SYSTEM_ALARM_QUEUE" 
+			/> -->
+		<!-- 日志的控制台输出配置 -->
+
+		<Console name="Console" target="SYSTEM_OUT">
+			<PatternLayout pattern="%d{yyyy-MM-dd HH:mm:ss} [%t] %-5p %c{1}:%L - %msg%n" />
+		</Console>
+		<!-- 日志的滚动输出配置 -->
+		<!-- <RollingFile name="RollingFile" filename="log/uc.log" -->
+		<!-- filepattern="log/%d{yyyyMMddHHmmss}-uc.log"> -->
+		<!-- <PatternLayout pattern="%d{yyyy-MM-dd HH:mm:ss} [%t] %-5p %c{1}:%L 
+			- %msg%n" /> -->
+		<!-- <Policies> -->
+		<!-- 控制滚动文件大小 -->
+		<!-- <SizeBasedTriggeringPolicy size="10MB" /> -->
+		<!-- </Policies> -->
+		<!-- <DefaultRolloverStrategy max="20" /> -->
+		<!-- </RollingFile> -->
+
+		<!-- 日志按天输出配置 -->
+		<!-- <RollingFile name="RollingFile" fileName="log/dhss-log-test-task.log" 
+			filePattern="log/dhss-log-test-task.log%d{yyyy-MM-dd}"> <PatternLayout pattern="%-d{yyyy-MM-dd 
+			HH:mm:ss} [%thread] %m%n" /> <Policies> <TimeBasedTriggeringPolicy modulate="true" 
+			interval="10" /> </Policies> </RollingFile> -->
+		<RollingFile name="RollingFile"
+			fileName="/var/log/dhss-solution/dhss-boss-es-query/boss-es-query.log"
+			filePattern="/var/log/dhss-solution/dhss-boss-es-query/boss-es-query.%d{yyyy-MM-dd}.gz">
+			<PatternLayout pattern="%-d{yyyy-MM-dd HH:mm:ss} [%thread] %m%n" />
+			<Policies>
+				<TimeBasedTriggeringPolicy modulate="true"
+					interval="1" />
+			</Policies>
+		</RollingFile>
+	</Appenders>
+  <Loggers>
+    <Root level="info">
+      <AppenderRef ref="Console"/>
+      <AppenderRef ref="RollingFile"/>
+      <AppenderRef ref="jmsQueue"/>
+    </Root>
+  </Loggers>
+</Configuration>

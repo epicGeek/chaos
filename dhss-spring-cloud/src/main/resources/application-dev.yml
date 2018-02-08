@@ -1,0 +1,38 @@
+cloud-client:
+   profiles: www
+spring:
+  profiles: dev
+  datasource:
+    driver-class-name: org.mariadb.jdbc.Driver
+    url: jdbc:mysql://database.dhss.ices.io:3306/dhss?characterEncoding=UTF-8
+    username: root
+    password: root
+    tomcat:
+      default-auto-commit: false
+      validation-interval: 1000
+      validation-query: SELECT 1
+      test-on-borrow: true
+      test-while-idle: true
+      time-between-eviction-runs-millis: 3600000
+      min-evictable-idle-time-millis: 600000
+  jpa:
+    hibernate:
+      generate-ddl: true
+      naming:
+        physical-strategy: org.springframework.boot.orm.jpa.hibernate.SpringPhysicalNamingStrategy 
+      ddl-auto: update
+    open-in-view: true
+  data:
+    rest:
+      base-path: /api/v1
+      default-page-size: 15
+  dao:
+    exceptiontranslation:
+      enabled: true
+  http:
+    multipart:
+      max-file-size: 10MB
+  jackson:
+    time-zone: Asia/Shanghai
+    date-format: yyyy-MM-dd HH:mm:ss
+    joda-date-time-format: yyyy-MM-dd HH:mm:ss

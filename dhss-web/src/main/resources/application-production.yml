@@ -1,0 +1,27 @@
+debug: true
+spring:
+  profiles: production
+  datasource:
+    driver-class-name: org.mariadb.jdbc.Driver
+    url: jdbc:mysql://172.16.73.52:3308/dhss0727?characterEncoding=UTF-8
+    username: root
+    password: bossboss
+  jpa:
+    generate-ddl: true
+    hibernate:
+      ddl-auto: none
+  dhss:
+    desQName: POSEIDON_DEV
+    baseLogPath: /var/log/dhss-solution/dhss-web
+    compBasePath: /var/log/dhss-solution/dhss-web/comp
+    luaTestDestQ: Q_script_service
+    luaTestLogPath: /home/jrdas/data/luaTestLogPath/
+    smart:
+      smartJobQueue: SYSTEM_TASK_CONFIG_QUEUE
+      messageCode: 70003
+      appQueue: smart-task-consumer
+      taskName: dhsssmarttask
+      jarName: dhss-smart-task.jar
+      maxNum: 8
+banner:
+  location: production.txt

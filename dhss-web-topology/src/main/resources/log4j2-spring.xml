@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE xml>
+<Configuration status="warn" name="MyApp">
+	<Appenders>
+		<!-- logger -->
+        
+        <!-- 日志的控制台输出配置 -->
+		<Console name="Console" target="SYSTEM_OUT">
+			<PatternLayout pattern="%d{yyyy-MM-dd HH:mm:ss} [%t] %-5p %c{1}:%L - %msg%n" />
+		</Console>
+		<!-- 日志的滚动输出配置 -->
+		<!-- <RollingFile name="RollingFile" filename="log/uc.log" -->
+		<!-- filepattern="log/%d{yyyyMMddHHmmss}-uc.log"> -->
+		<!-- <PatternLayout pattern="%d{yyyy-MM-dd HH:mm:ss} [%t] %-5p %c{1}:%L 
+			- %msg%n" /> -->
+		<!-- <Policies> -->
+		<!-- 控制滚动文件大小 -->
+		<!-- <SizeBasedTriggeringPolicy size="10MB" /> -->
+		<!-- </Policies> -->
+		<!-- <DefaultRolloverStrategy max="20" /> -->
+		<!-- </RollingFile> -->
+
+		<!-- 日志按天输出配置 -->
+		<RollingFile name="RollingFile" fileName="/var/log/dhss-solution/dhss-web-topology/dhss-web-topology.log"
+			filePattern="/var/log/dhss-solution/dhss-web-topology/dhss-web-topology.%d{yyyy-MM-dd}.gz">
+			<PatternLayout pattern="%-d{yyyy-MM-dd HH:mm:ss} [%thread] %m%n" />
+			<Policies>
+				<TimeBasedTriggeringPolicy modulate="true" interval="1" />
+			</Policies>
+		</RollingFile>
+	</Appenders>
+
+
+	<Loggers>
+		<Root level="INFO">
+			<AppenderRef ref="RollingFile" />
+		</Root>
+		<Logger name="com.nokia.*" level="INFO" additivity="false">
+			<AppenderRef ref="RollingFile" />
+		</Logger>
+	</Loggers>
+</Configuration>

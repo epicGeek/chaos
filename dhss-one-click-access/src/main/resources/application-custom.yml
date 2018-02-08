@@ -1,0 +1,14 @@
+spring:
+  jackson:
+    time-zone: Asia/Shanghai
+    date-format: yyyy-MM-dd HH:mm:ss
+    joda-date-time-format: yyyy-MM-dd HH:mm:ss
+dhss:
+  one-click-access: 
+    log-storage-path: /var/log/dhss-solution/dhss-one-click-access/
+    proxy-server-for-telnet:
+      login-name: 
+      login-password: 
+      server-ip: 
+      server-port: 22
+    

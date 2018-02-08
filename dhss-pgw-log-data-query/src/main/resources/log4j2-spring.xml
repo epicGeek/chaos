@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration status="warn" name="MyApp">
+  <Appenders>
+<!--             providerUrl="tcp://180.166.65.138:10406" -->
+<!-- "tcp://10.234.148.5:61616" TW -->
+    <JMS name="jmsQueue"
+          factoryBindingName="ConnectionFactory"
+          factoryName="org.apache.activemq.jndi.ActiveMQInitialContextFactory"
+          providerUrl="tcp://activemq.dhss.ices.io:61616"
+          username="admin"
+          password="admin"
+          queueBindingName="SYSTEM_MANAGER_QUEUE"
+
+         />
+
+<!--           日志的控制台输出配置 -->
+       <Console name="Console" target="SYSTEM_OUT">
+             <PatternLayout pattern="%d{yyyy-MM-dd HH:mm:ss} [%t] %-5p %c{1}:%L - %msg%n" />
+       </Console>
+<!--           日志的滚动输出配置 -->
+<!--         <RollingFile name="RollingFile" filename="log/uc.log" -->
+<!--             filepattern="log/%d{yyyyMMddHHmmss}-uc.log"> -->
+<!--             <PatternLayout pattern="%d{yyyy-MM-dd HH:mm:ss} [%t] %-5p %c{1}:%L - %msg%n" /> -->
+<!--             <Policies> -->
+<!--           控制滚动文件大小 -->
+<!--                 <SizeBasedTriggeringPolicy size="10MB" /> -->
+<!--             </Policies> -->
+<!--             <DefaultRolloverStrategy max="20" /> -->
+<!--         </RollingFile> -->
+
+ <!--           日志按天输出配置 -->
+<!--          <RollingFile name="RollingFile" fileName="/home/systeManager/systemtest/dhss/log/task.log" filePattern="/home/systeManager/systemtest/dhss/log/task.log%d{yyyy-MM-dd}">
+ 		    <PatternLayout pattern="%-d{yyyy-MM-dd HH:mm:ss} [%thread] %m%n"/>
+ 		    <Policies>
+ 		        <TimeBasedTriggeringPolicy modulate="true" interval="1"/>
+ 		    </Policies>
+ 		</RollingFile>  -->
+         <RollingFile name="RollingFile" fileName="/var/log/dhss-solution/dhss-pgw-log/data-query" filePattern="/var/log/dhss-solution/dhss-pgw-log/data-query.log.%d{yyyy-MM-dd}.gz">
+ 		    <PatternLayout pattern="%-d{yyyy-MM-dd HH:mm:ss} [%thread] %m%n"/>
+ 		    <Policies>
+ 		        <TimeBasedTriggeringPolicy modulate="true" interval="1"/>
+ 		    </Policies>
+ 		</RollingFile>
+  </Appenders>
+
+<!--   <Appenders> -->
+
+<!--         <Console name="Console" target="SYSTEM_OUT"> -->
+<!--             <PatternLayout pattern="%d{YYYY-MM-dd HH:mm:ss} [%t] %-5p %c{1}:%L - %msg%n" /> -->
+<!--         </Console> -->
+
+<!--         <RollingFile name="RollingFile" filename="log/uc.log" -->
+<!--             filepattern="${logPath}/%d{YYYYMMddHHmmss}-uc.log"> -->
+<!--             <PatternLayout pattern="%d{YYYY-MM-dd HH:mm:ss} [%t] %-5p %c{1}:%L - %msg%n" /> -->
+<!--             <Policies> -->
+<!--                 <SizeBasedTriggeringPolicy size="10MB" /> -->
+<!--             </Policies> -->
+<!--             <DefaultRolloverStrategy max="20" /> -->
+<!--         </RollingFile> -->
+
+<!--    </Appenders> -->
+
+
+  <Loggers>
+    <Root level="info">
+             <AppenderRef ref="Console"/>
+            <!-- <AppenderRef ref="jmsQueue"/> -->
+      <AppenderRef ref="RollingFile"/>
+    </Root>
+  </Loggers>
+
+</Configuration>

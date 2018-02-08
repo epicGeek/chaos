@@ -1,0 +1,19 @@
+dhss:
+  boss:
+    query:
+      elastic-search-host: 172.16.73.51
+      country-code: 86
+      mmc: 460
+      hlrsn-transform: false
+      boss-version: chinamobile
+      export-limit: 15000
+spring:
+  jackson:
+    time-zone: Asia/Shanghai
+  datasource:
+    driver-class-name: org.mariadb.jdbc.Driver
+    url: jdbc:mysql://database.dhss.ices.io:3306/boss_config?characterEncoding=UTF-8
+    username: root
+    password: root
+server:
+  port: 8096

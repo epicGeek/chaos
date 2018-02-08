@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration status="warn" name="MyApp">
+	<CustomLevels>
+		<CustomLevel name="EVENT" intLevel="350" />
+		<CustomLevel name="NOTICE" intLevel="450" />
+		<CustomLevel name="VERBOSE" intLevel="550" />
+	</CustomLevels>
+	<Appenders>
+		<!-- logger -->
+		
+		<Console name="Console" target="SYSTEM_OUT">
+			<PatternLayout pattern="%d{yyyy-MM-dd HH:mm:ss} [%t] %-5p %c{1}:%L - %msg%n" />
+		</Console>
+		<!-- 日志的滚动输出配置 -->
+		<!-- <RollingFile name="RollingFile" filename="log/uc.log" -->
+		<!-- filepattern="log/%d{yyyyMMddHHmmss}-uc.log"> -->
+		<!-- <PatternLayout pattern="%d{yyyy-MM-dd HH:mm:ss} [%t] %-5p %c{1}:%L 
+			- %msg%n" /> -->
+		<!-- <Policies> -->
+		<!-- 控制滚动文件大小 -->
+		<!-- <SizeBasedTriggeringPolicy size="10MB" /> -->
+		<!-- </Policies> -->
+		<!-- <DefaultRolloverStrategy max="20" /> -->
+		<!-- </RollingFile> -->
+
+		<!-- 日志按天输出配置 -->
+		<RollingFile name="RollingFile" fileName="/var/log/dhss-solution/dhss-log-proxy/dhss-log-proxy.log"
+			filePattern="/var/log/dhss-solution/dhss-log-proxy/dhss-log-proxy.%d{yyyy-MM-dd}.gz">
+			<PatternLayout pattern="%-d{yyyy-MM-dd HH:mm:ss} [%thread] %m%n" />
+			<Policies>
+				<TimeBasedTriggeringPolicy modulate="true" interval="10" />
+			</Policies>
+		</RollingFile>
+	</Appenders>
+	<Loggers>
+		<Root level="info">
+			<AppenderRef ref="RollingFile" />
+        </Root>
+		<Logger name="com.nokia.*" level="debug" additivity="false">
+		</Logger>
+	</Loggers>
+</Configuration>

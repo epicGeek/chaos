@@ -1,0 +1,468 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- 用户自定义用户数据解析规则,以及配置说明。
+可配置的元素包括tab、field、sub-field、value-mapping
+
+ 1.  tab用于定义页面上的Tab页，每配置一个元素为一个Tab，比如General，页面上就会增加一个Tab标签
+  tabName：表示该tab名称； 
+  col：表示在当前的tab里结果以几列显示
+  order：该属性表示该Tab的排序，正整数从小到大，小的排前，大的排后 
+  
+ 2. field：需要显示在页面上的内容
+   zhName：表示该字段对应的在页面上呈现名称;
+   path： 表示该字段在结果xml文件中的路径，只解析object里的，即要求必须以/objects/开始
+   convert： 表示是否需要对xml的结果进行转换，例如/objects/hlr/mscat在查询结果xml中可能值为10、20，如果需要将结果转换为正常用户、测试用户，就将该属性设置为true
+   如果convert的属性为true，则必须定义value-mapping元素，逐一定义所有可能值对应的显示内容，如果实际值在value-mapping的列表中没有定义，则结果显示为空
+   filter: 表示使用该属性的值作为条件对多个结果进行过滤
+   
+ 3. sub-field：下级标签的内容，如果要呈现的内容是包含在某个field中，则定义为该field的子元素
+ 		sub-field可使用的属性与field相同
+
+	 
+	更新信息：2015-6-23 gaojie -->
+<dhss:subscriber-data-parse-rule xmlns:dhss="dhss">
+
+	<!-- tab1 ,General-->
+	<dhss:tab tabName='General' col='2' order='1'>
+	  <dhss:field zhName='identifier' path='/objects/identifier'></dhss:field>
+		<dhss:field zhName='Active IMSI' path='/objects/hlr/imsiActive'></dhss:field>
+		<dhss:field zhName='Mobile Subscriber Category' path='/objects/hlr/mscat' convert="true">
+			<dhss:value-mapping value='10'>normal</dhss:value-mapping>
+			<dhss:value-mapping value='20'>test</dhss:value-mapping>
+		</dhss:field>
+
+		<dhss:field zhName='Routing Category' path='/objects/hlr/routingCategory' />
+		<dhss:field zhName='Routing Category Extension' path='/objects/hlr/routingCategoryExtension' />		
+		
+		<dhss:field zhName='Basic services' >
+					<dhss:sub-field zhName='TS11 Tele services' path='/objects/hlr/ts11/msisdn'></dhss:sub-field>
+					<dhss:sub-field zhName='TS21 Short message (mobile terminating)' path='/objects/hlr/ts21/msisdn'></dhss:sub-field>
+					<dhss:sub-field zhName='TS22 Short message (mobile originating)' path='/objects/hlr/ts22/msisdn'></dhss:sub-field>
+					<dhss:sub-field zhName='BS30 general circuit switched data synchronous' path='/objects/hlr/bs30genr/msisdn'></dhss:sub-field>
+					<dhss:sub-field zhName='BS34 Data circuit duplex synchronous (9600 b/s)' path='/objects/hlr/bs34/msisdn'></dhss:sub-field>
+					<dhss:sub-field zhName='GPRS Data circuit duplex synchronous-General' path='/objects/hlr/gprs/msisdn'></dhss:sub-field>					
+		</dhss:field>
+		
+		<dhss:field zhName='UMTS Subscription'>
+			<dhss:sub-field zhName='GSM' path='/objects/hlr/umtsSubscriber/accTypeGSM' convert="true" >
+			  <dhss:value-mapping value='true' >ACC_TYPE_GSM</dhss:value-mapping>
+			</dhss:sub-field>
+			<dhss:sub-field zhName='GERAN' path='/objects/hlr/umtsSubscriber/accTypeGERAN' convert="true">
+              <dhss:value-mapping value='true' >ACC_TYPE_GERAN</dhss:value-mapping>
+			</dhss:sub-field>
+			<dhss:sub-field zhName='UTRAN' path='/objects/hlr/umtsSubscriber/accTypeUTRAN' convert="true">
+			  <dhss:value-mapping value='true' >ACC_TYPE_UTRAN</dhss:value-mapping>
+			</dhss:sub-field>
+		</dhss:field>
+		
+		<dhss:field zhName='IMEISV' path='/objects/hlr/imeisv' />
+		<dhss:field zhName='FTNO number translation Index' path='/objects/hlr/ftnTransIndex' />
+
+	</dhss:tab>
+
+	<!-- tab2, Auc -->
+	<dhss:tab tabName='Auc' col='3' order='2'>
+		<dhss:field zhName='IMSI' path='/objects/auc/imsi' />
+		<dhss:field zhName='enKey' path='/objects/auc/encKey' />
+		<dhss:field zhName='algoId' path='/objects/auc/algoId' />
+		<dhss:field zhName='kdbId' path='/objects/auc/kdbId' />
+		<dhss:field zhName='ac Subscriber type' path='/objects/auc/acsub' convert="true">
+			<dhss:value-mapping value='1'>GSM</dhss:value-mapping>
+			<dhss:value-mapping value='2'>UMTS</dhss:value-mapping>
+		</dhss:field>
+		<dhss:field zhName='amf' path='/objects/auc/amf' />
+	</dhss:tab>
+	
+	
+	<!-- tab3,Operator Determined Barring -->
+	<dhss:tab tabName='Operator Determined Barring' col='3' order='3'>
+	
+	
+	
+		<dhss:field zhName='Barring of outgoing calls' path='/objects/hlr/odboc' convert='true'>
+				<dhss:value-mapping value='0'>None</dhss:value-mapping>
+				<dhss:value-mapping value='1'>All outgoing calls</dhss:value-mapping>
+				<dhss:value-mapping value='2'>All outgoing international calls</dhss:value-mapping>
+				<dhss:value-mapping value='3'>Barring of all outgoing international calls  except those directed to the HPLMN country</dhss:value-mapping>
+				<dhss:value-mapping value='4'>All outgoing calls when roaming outside the HPLMN country</dhss:value-mapping>
+				<dhss:value-mapping value='5'>All outgoing calls when roaming outside HPLMN country except SMS</dhss:value-mapping>
+		</dhss:field>
+		
+		<dhss:field zhName='Barring of incoming calls' path='/objects/hlr/odbic' convert='true'>
+				<dhss:value-mapping value='0'>None</dhss:value-mapping>
+				<dhss:value-mapping value='1'>All incoming calls</dhss:value-mapping>
+				<dhss:value-mapping value='2'>All incoming calls when roaming outside the HPLMN country</dhss:value-mapping>
+				<dhss:value-mapping value='3'>All incoming calls when roaming outside HPLMN country except SMS</dhss:value-mapping>
+		</dhss:field>
+		
+		<dhss:field zhName='Barring of roaming' path='/objects/hlr/odbr' convert='true'>
+				<dhss:value-mapping value='0'>None</dhss:value-mapping>
+				<dhss:value-mapping value='1'>Outside the HPLMN</dhss:value-mapping>
+				<dhss:value-mapping value='2'>Outside the HPLMN country</dhss:value-mapping>
+		</dhss:field>
+		
+		
+		<dhss:field zhName='Barring of supplementary service management' path='/objects/hlr/odbssm' convert='true'>
+				<dhss:value-mapping value='0'>None</dhss:value-mapping>
+				<dhss:value-mapping value='1'>Subscriber Controlled Input</dhss:value-mapping>
+		</dhss:field>		
+		
+		<dhss:field zhName='Barring of Subscriber Controlled Input' path='/objects/hlr/odbsci' convert='true'>
+				<dhss:value-mapping value='0'>None</dhss:value-mapping>
+				<dhss:value-mapping value='1'>Registration Erasure Activation and Deactivation requests for CF</dhss:value-mapping>
+				<dhss:value-mapping value='2'>Registration and Erasure requests for CF</dhss:value-mapping>
+				<dhss:value-mapping value='3'>Register and Erase requests for Call Forwarding are blocked allow CFNRy Timer changes during registration</dhss:value-mapping>
+		</dhss:field>	
+		
+		<dhss:field zhName='Barring of outgoing premium rate calls' path='/objects/hlr/odboprc' convert='true'>
+				<dhss:value-mapping value='0'>None</dhss:value-mapping>
+				<dhss:value-mapping value='1'>Information calls</dhss:value-mapping>
+				<dhss:value-mapping value='2'>Entertainment calls</dhss:value-mapping>
+				<dhss:value-mapping value='3'>All</dhss:value-mapping>
+		</dhss:field>		
+		
+		<dhss:field zhName='Barring of GPRS' path='/objects/hlr/odbgprs' convert='true'>
+				<dhss:value-mapping value='0'>None</dhss:value-mapping>
+				<dhss:value-mapping value='1'>While roaming in VPLMN</dhss:value-mapping>
+				<dhss:value-mapping value='2'>In all PLMN</dhss:value-mapping>
+		</dhss:field>					
+		
+		<dhss:field zhName='Barring of Packet Oriented Services' path='/objects/hlr/eps/odbPOAccessEps'></dhss:field>
+		<dhss:field zhName='Barring of Explicit Call Transfer' path='/objects/hlr/odbect'></dhss:field>
+
+		<dhss:field zhName='Barring specific to HPLMN'>
+				<dhss:sub-field zhName='Operator specific barring type 1' path='/objects/hlr/osb1' ></dhss:sub-field>
+				<dhss:sub-field zhName='Operator specific barring type 2' path='/objects/hlr/osb2' ></dhss:sub-field>
+				<dhss:sub-field zhName='Operator specific barring type 3' path='/objects/hlr/osb3' ></dhss:sub-field>
+				<dhss:sub-field zhName='Operator specific barring type 4' path='/objects/hlr/osb4' ></dhss:sub-field>
+		</dhss:field>	
+
+	</dhss:tab> 
+	
+	<!--  tab4,Restrictions  -->
+	<dhss:tab  tabName='Restrictions' col='2' order='4'>
+		<dhss:field zhName='Roaming Profile' path='/objects/hlr/roamSubscription/roamSubscriptionInfo' convert='true' >
+			<dhss:value-mapping value='NongprsRSI'>CS Service Only</dhss:value-mapping>
+			<dhss:value-mapping value='DefaultRSI'>CS and GPRS Service</dhss:value-mapping>
+		</dhss:field>
+
+		
+		<dhss:field zhName='Subscription restriction' path='/objects/hlr/sr' convert='true' >
+			<dhss:value-mapping value='1'>All GSM PLMNs</dhss:value-mapping>
+			<dhss:value-mapping value='2'>One national PLMN and all other foreign PLMNs</dhss:value-mapping>
+			<dhss:value-mapping value='9'>Home PLMN only</dhss:value-mapping>
+		</dhss:field>
+	</dhss:tab>
+	
+	<!-- tab5,Grps -->
+	<dhss:tab tabName='Gprs' col='2' order='5'>
+		<dhss:field zhName='Newtork Access' path='/objects/hlr/nwa' convert='true'>
+			<dhss:value-mapping value='1'>GSM</dhss:value-mapping>
+			<dhss:value-mapping value='2'>GPRS</dhss:value-mapping>
+			<dhss:value-mapping value='3'>GSM and GPRS</dhss:value-mapping>
+		</dhss:field>
+		
+		<dhss:field zhName='actIMSIGprs' path='/objects/hlr/actIMSIGprs' ></dhss:field>
+		
+		<dhss:field zhName='General Charging Characteristics'>
+			<dhss:sub-field zhName='Charging Characteristics Profile' path='/objects/hlr/generalChargingCharacteristics/chargingCharacteristicsProfile'></dhss:sub-field>
+			<dhss:sub-field zhName='Charging Characteristics Behavior' path='/objects/hlr/generalChargingCharacteristics/chargingCharacteristicsBehavior'></dhss:sub-field>
+		</dhss:field>
+		
+		<dhss:field zhName='General Packet Radio Services' parentName='/objects/hlr/pdpContext' isArray="true">
+			<dhss:sub-field zhName='Record ID' path='/objects/hlr/pdpContext/id'></dhss:sub-field>
+			<dhss:sub-field zhName='Address type' path='/objects/hlr/pdpContext/type'></dhss:sub-field>
+			<dhss:sub-field zhName='Quality of Service Profile' path='/objects/hlr/pdpContext/qosProfile'></dhss:sub-field>
+			<dhss:sub-field zhName='Access point name' path='/objects/hlr/pdpContext/apn'></dhss:sub-field>
+			<dhss:sub-field zhName='Access point name area' path='/objects/hlr/pdpContext/apnArea'></dhss:sub-field>
+		</dhss:field>
+	</dhss:tab>
+	
+	<!-- tab6,Eps-->
+	<dhss:tab tabName='Eps' col='1' order='6'>
+		<dhss:field zhName='eps'>
+			<dhss:sub-field zhName='default PdnContext Id' path='/objects/hlr/eps/defaultPdnContextId' />
+			<dhss:sub-field zhName='max Bandwidth Up' path='/objects/hlr/eps/maxBandwidthUp' />
+			<dhss:sub-field zhName='max Bandwidth Down' path='/objects/hlr/eps/maxBandwidthDown' />
+			<dhss:sub-field zhName='mme Identity' path='/objects/hlr/eps/mmeIdentity' />
+			<dhss:sub-field zhName='mme Realm' path='/objects/hlr/eps/mmeRealm' />
+			<dhss:sub-field zhName='ms Purged Eps' path='/objects/hlr/eps/msPurgedEps' />
+			<dhss:sub-field zhName='msisdn' path='/objects/hlr/eps/msisdn' />
+			<dhss:sub-field zhName='session Transfer Number' path='/objects/hlr/eps/sessionTransferNumber' />
+			<dhss:sub-field zhName='odbPO Access Eps' path='/objects/hlr/eps/odbPOAccessEps' />
+			<dhss:sub-field zhName='rfsp Index' path='/objects/hlr/eps/rfspIndex' />
+			<dhss:sub-field zhName='ims Voice Over PS' path='/objects/hlr/eps/imsVoiceOverPS' />
+			<dhss:sub-field zhName='vplmn Id S6a' path='/objects/hlr/eps/vplmnIdS6a' />
+			<dhss:sub-field zhName='plmn Status' path='/objects/hlr/eps/plmnStatus' />
+			<dhss:sub-field zhName='location Update Timestamp' path='/objects/hlr/eps/locUpdateTimestamp' />
+			<dhss:sub-field zhName='eps Roam Area Name' path='/objects/hlr/epsRoamAreaName' />
+			<dhss:sub-field zhName='eps Roam Subscription Info Name' path='/objects/hlr/epsRoamSubscriptionInfoName' />
+			<dhss:sub-field zhName='mme Supp Features featured List Id' path='/objects/hlr/eps/mmeSuppFeatures/featuredListId' />
+			<dhss:sub-field zhName='mme Supp Features featured List' path='/objects/hlr/eps/mmeSuppFeatures/featuredList' />
+		</dhss:field>
+		<dhss:field zhName='eps Pdn Context' parentName='/objects/hlr/epsPdnContext' isArray="true" convert="true">
+			<dhss:sub-field zhName='id' path='/objects/hlr/epsPdnContext/contextId' />
+			<dhss:sub-field zhName='APN   _' path='/objects/hlr/epsPdnContext/apn' />
+			<dhss:sub-field zhName='type' path='/objects/hlr/epsPdnContext/type' />
+			<dhss:sub-field zhName='pdn Gw Dynamic Allocation' path='/objects/hlr/epsPdnContext/pdnGwDynamicAllocation' />
+			<dhss:sub-field zhName='vplmn Address Allowed' path='/objects/hlr/epsPdnContext/vplmnAddressAllowed' />
+			<dhss:sub-field zhName='pdn Gw IPv4' path='/objects/hlr/epsPdnContext/pdnGwIPv4' />
+			<dhss:sub-field zhName='max Bandwidth Up' path='/objects/hlr/epsPdnContext/maxBandwidthUp' />
+			<dhss:sub-field zhName='max Bandwidth Down' path='/objects/hlr/epsPdnContext/maxBandwidthDown' />
+			<dhss:sub-field zhName='qos' path='/objects/hlr/epsPdnContext/qos' />
+			<dhss:sub-field zhName='Charging Characteristics Profile' path='/objects/hlr/epsPdnContext/pdnChargingCharacteristics/chargingCharacteristicsProfile' />
+			<dhss:sub-field zhName='Charging Characteristics Behavior' path='/objects/hlr/epsPdnContext/pdnChargingCharacteristics/chargingCharacteristicsBehavior' />
+		</dhss:field>
+	</dhss:tab>
+	
+	<!-- tab7,Supplementary Services -->
+	<dhss:tab tabName='Supplementary Services' col='3' order='7'>
+
+				<dhss:field zhName='Calling line identification presentation' path='/objects/hlr/clip' />
+				<dhss:field zhName='Calling line identification presentation Override possible' path='/objects/hlr/clipOverride' />			
+				<dhss:field zhName='Multimedia Ring Back Tone' path='/objects/hlr/natss10' />
+				<dhss:field zhName='Call hold' path='/objects/hlr/hold' />
+				<dhss:field zhName='Multiparty supplementary services' path='/objects/hlr/mpty' />
+				<dhss:field zhName='call waitting' parentName='/objects/hlr/caw' isArray="true">
+						<dhss:sub-field zhName='basic Service Group' path='/objects/hlr/caw/basicServiceGroup' />
+						<dhss:sub-field zhName='status' path='/objects/hlr/caw/status' convert='true'>
+									<dhss:value-mapping value='4'>Provide</dhss:value-mapping>
+									<dhss:value-mapping value='5'>Activate</dhss:value-mapping>
+						</dhss:sub-field>
+		    </dhss:field>
+		
+		<dhss:field zhName='Barring all outgoing calls' parentName='/objects/hlr/baoc' isArray="true">
+			<dhss:sub-field zhName='basicServiceGroup' path='/objects/hlr/baoc/basicServiceGroup'></dhss:sub-field>
+			<dhss:sub-field zhName='status' path='/objects/hlr/baoc/status' convert='true'>
+				<dhss:value-mapping value='4'>Provide</dhss:value-mapping>
+				<dhss:value-mapping value='5'>Activate</dhss:value-mapping>
+			</dhss:sub-field>
+		</dhss:field>
+		<dhss:field zhName='Barring of outgoing international calls' parentName='/objects/hlr/boic' isArray="true">
+			<dhss:sub-field zhName='basicServiceGroup' path='/objects/hlr/boic/basicServiceGroup'></dhss:sub-field>
+			<dhss:sub-field zhName='status' path='/objects/hlr/boic/status' convert='true'>
+				<dhss:value-mapping value='4'>Provide</dhss:value-mapping>
+				<dhss:value-mapping value='5'>Activate</dhss:value-mapping>
+			</dhss:sub-field>
+		</dhss:field>
+		<dhss:field zhName='Barring of outgoing international calls except those directed to HPLMN country' parentName='/objects/hlr/boicexhc' isArray="true">
+			<dhss:sub-field zhName='basicServiceGroup' path='/objects/hlr/boicexhc/basicServiceGroup'></dhss:sub-field>
+			<dhss:sub-field zhName='status' path='/objects/hlr/boicexhc/status' convert='true'>
+				<dhss:value-mapping value='4'>Provide</dhss:value-mapping>
+				<dhss:value-mapping value='5'>Activate</dhss:value-mapping>
+			</dhss:sub-field>
+		</dhss:field>
+		<dhss:field zhName='Barring all incoming calls' parentName='/objects/hlr/baic' isArray="true">
+			<dhss:sub-field zhName='basicServiceGroup' path='/objects/hlr/baic/basicServiceGroup'></dhss:sub-field>
+			<dhss:sub-field zhName='status' path='/objects/hlr/baic/status' convert='true'>
+				<dhss:value-mapping value='4'>Provide</dhss:value-mapping>
+				<dhss:value-mapping value='5'>Activate</dhss:value-mapping>
+			</dhss:sub-field>
+		</dhss:field>
+		<dhss:field zhName='Barring of incoming calls while roaming outside HPLMN country' parentName='/objects/hlr/bicroam' isArray="true">
+			<dhss:sub-field zhName='basicServiceGroup' path='/objects/hlr/bicroam/basicServiceGroup'></dhss:sub-field>
+			<dhss:sub-field zhName='status' path='/objects/hlr/bicroam/status' convert='true'>
+				<dhss:value-mapping value='4'>Provide</dhss:value-mapping>
+				<dhss:value-mapping value='5'>Activate</dhss:value-mapping>
+			</dhss:sub-field>
+		</dhss:field>	
+		
+			
+		<dhss:field zhName='Call forwarding default' parentName='/objects/hlr/cfd' isArray="true">
+			<dhss:sub-field zhName='Replace CF Conditional' path='/objects/hlr/cfd/replaceCFConditional' convert='true'>
+				<dhss:value-mapping value='1'>On mobile subscriber busy</dhss:value-mapping>
+				<dhss:value-mapping value='2'>On no reply</dhss:value-mapping>
+				<dhss:value-mapping value='4'>On mobile subscriber not reachable</dhss:value-mapping>
+			</dhss:sub-field>
+			<dhss:sub-field zhName='Forward to Number' path='/objects/hlr/cfd/isdnNumber'></dhss:sub-field>
+			<dhss:sub-field zhName='status' path='/objects/hlr/cfd/status' convert='true'>
+				<dhss:value-mapping value='4'>Provide</dhss:value-mapping>
+				<dhss:value-mapping value='5'>Register</dhss:value-mapping>
+				<dhss:value-mapping value='7'>Activate</dhss:value-mapping>
+			</dhss:sub-field>
+			<dhss:sub-field zhName='FTNO Format' path='/objects/hlr/cfd/ftnoType'></dhss:sub-field>
+			<dhss:sub-field zhName='Service Available' path='/objects/hlr/cfd/serviceAvailable' convert='true'>
+				<dhss:value-mapping value='1'>All GSM PLMNs</dhss:value-mapping>
+				<dhss:value-mapping value='5'>Home PLMN only</dhss:value-mapping>
+			</dhss:sub-field>			
+		</dhss:field>
+		
+		<dhss:field zhName='Call forwarding unconditional' parentName='/objects/hlr/cfu' isArray="true">
+			<dhss:sub-field zhName='Basic Service Group' path='/objects/hlr/cfu/basicServiceGroup'></dhss:sub-field>
+			<dhss:sub-field zhName='Status' path='/objects/hlr/cfu/status' convert='true'>
+				<dhss:value-mapping value='4'>Provide</dhss:value-mapping>
+				<dhss:value-mapping value='6'>Register</dhss:value-mapping>
+				<dhss:value-mapping value='7'>Activate</dhss:value-mapping>
+			</dhss:sub-field>
+			<dhss:sub-field zhName='ISDN Number' path='/objects/hlr/cfu/isdnNumber'></dhss:sub-field>
+		</dhss:field>
+		<dhss:field zhName='Call forwarding on mobile subscriber busy' parentName='/objects/hlr/cfb' isArray="true">
+			<dhss:sub-field zhName='Basic Service Group' path='/objects/hlr/cfb/basicServiceGroup'></dhss:sub-field>
+			<dhss:sub-field zhName='Status' path='/objects/hlr/cfb/status' convert='true'>
+				<dhss:value-mapping value='4'>Provide</dhss:value-mapping>
+				<dhss:value-mapping value='6'>Register</dhss:value-mapping>
+				<dhss:value-mapping value='7'>Activate</dhss:value-mapping>
+			</dhss:sub-field>
+			<dhss:sub-field zhName='ISDN Number' path='/objects/hlr/cfb/isdnNumber'></dhss:sub-field>
+		</dhss:field>
+		<dhss:field zhName='Call forwarding on mobile subscriber not reachable' parentName='/objects/hlr/cfnrc' isArray="true">
+			<dhss:sub-field zhName='Basic Service Group' path='/objects/hlr/cfnrc/basicServiceGroup'></dhss:sub-field>
+			<dhss:sub-field zhName='Status' path='/objects/hlr/cfnrc/status' convert='true'>
+				<dhss:value-mapping value='4'>Provide</dhss:value-mapping>
+				<dhss:value-mapping value='6'>Register</dhss:value-mapping>
+				<dhss:value-mapping value='7'>Activate</dhss:value-mapping>
+			</dhss:sub-field>
+			<dhss:sub-field zhName='ISDN Number' path='/objects/hlr/cfnrc/isdnNumber'></dhss:sub-field>
+		</dhss:field>		
+		<dhss:field zhName='Call forwarding on no reply' parentName='/objects/hlr/cfnry' isArray='true' convert='true'>
+			<dhss:sub-field zhName='Basic Service Group' path='/objects/hlr/cfnry/basicServiceGroup'></dhss:sub-field>
+			<dhss:sub-field zhName='Status' path='/objects/hlr/cfnry/status' convert='true'>
+				<dhss:value-mapping value='4'>Provide</dhss:value-mapping>
+				<dhss:value-mapping value='6'>Register</dhss:value-mapping>
+				<dhss:value-mapping value='7'>Activate</dhss:value-mapping>
+			</dhss:sub-field>
+			<dhss:sub-field zhName='ISDN Number' path='/objects/hlr/cfnry/isdnNumber'></dhss:sub-field>
+			<dhss:sub-field zhName='No Reply Condition Timer' path='/objects/hlr/cfnry/noReplyConditionTimer'></dhss:sub-field>
+		</dhss:field>		
+	
+		<dhss:field zhName='Barring of incoming international call' path='/objects/hlr/natss01' />
+		<dhss:field zhName='Barring of incoming anonymous call' path='/objects/hlr/natss02' />
+				
+
+	</dhss:tab>
+	<!-- tab8,Camel Services-->
+	<dhss:tab tabName='Camel Services' col='2' order='8'>
+
+		<dhss:field zhName='tcsi'>
+			<dhss:sub-field zhName='Operator Service Name / Scf Address / Service Key' path='/objects/hlr/tcsi/operatorServiceName' convert = 'true'>
+				<dhss:value-mapping	value='THOMINGCUE'>THOMINGCUE / 886973848901 / 12</dhss:value-mapping> 
+				<dhss:value-mapping	value='THOMINGREL'>THOMINGREL / 886973848901 / 12</dhss:value-mapping> 
+			</dhss:sub-field>			
+			<dhss:sub-field zhName='State' path='/objects/hlr/tcsi/csiState' convert = 'true'>
+				<dhss:value-mapping	value='1'>Active</dhss:value-mapping> 
+				<dhss:value-mapping	value='2'> </dhss:value-mapping> 
+			</dhss:sub-field>
+			<dhss:sub-field zhName='Notify' path='/objects/hlr/tcsi/csiNotify' convert = 'true'>
+				<dhss:value-mapping	value='1'>Notification to GSMSCF</dhss:value-mapping> 
+			</dhss:sub-field>			
+		</dhss:field>
+		
+		<dhss:field zhName='vtcsi'>
+			<dhss:sub-field zhName='Operator Service Name / Scf Address / Service Key' path='/objects/hlr/vtcsi/operatorServiceName' convert = 'true'>
+				<dhss:value-mapping	value='TASNSDM'>TASNSDM / 886973848931 / 12</dhss:value-mapping>   
+			</dhss:sub-field>			
+			<dhss:sub-field zhName='State' path='/objects/hlr/vtcsi/csiState' convert = 'true'>
+				<dhss:value-mapping	value='1'>Active</dhss:value-mapping> 
+				<dhss:value-mapping	value='2'> </dhss:value-mapping> 
+			</dhss:sub-field>
+			<dhss:sub-field zhName='Notify' path='/objects/hlr/tcsi/csiNotify' convert = 'true'>
+				<dhss:value-mapping	value='1'>Notification to GSMSCF</dhss:value-mapping> 
+			</dhss:sub-field>			
+		</dhss:field>		
+		
+		<dhss:field zhName='sset'>
+			<dhss:sub-field zhName='Operator Service Name' path='/objects/hlr/sset/operatorServiceName' />
+			<dhss:sub-field zhName='State' path='/objects/hlr/sset/state' convert = 'true'>
+				<dhss:value-mapping	value='1'>Active</dhss:value-mapping> 
+			</dhss:sub-field>
+		</dhss:field>
+			
+	</dhss:tab>
+	<!-- tab9,Mobile Data -->
+	<dhss:tab tabName='Mobile Data' col='2' order='9'>
+		<dhss:field zhName='VLR Mobile Data'>
+			<dhss:sub-field zhName='VLR Id Valid' path='/objects/hlr/vlrMobData/vlrIdValid'></dhss:sub-field>
+			<dhss:sub-field zhName='MSC Number' path='/objects/hlr/vlrMobData/mscNumber'></dhss:sub-field>
+			<dhss:sub-field zhName='VLR Number' path='/objects/hlr/vlrMobData/isdnNumberOfVLR'></dhss:sub-field>
+			<dhss:sub-field zhName='MS Purged by VLR' path='/objects/hlr/vlrMobData/msPurged' ></dhss:sub-field>
+			<dhss:sub-field zhName='Mobile Terminating Call Possible' path='/objects/hlr/vlrMobData/mobileTerminatingCallPossible'></dhss:sub-field>
+			<dhss:sub-field zhName='PLMN Allowed' path='/objects/hlr/vlrMobData/plmnAllowed'></dhss:sub-field>
+			<dhss:sub-field zhName='Roaming AreaAllowed' path='/objects/hlr/vlrMobData/roamingAreaAllowed'></dhss:sub-field>
+			<dhss:sub-field zhName='MSC Area Restricted Received' path='/objects/hlr/vlrMobData/mscAreaRestrictedReceived'></dhss:sub-field>
+			<dhss:sub-field zhName='Supported LCS Capability Sets for VLR' path='/objects/hlr/vlrMobData/supportedLCSCapabilitySetsForVLR'></dhss:sub-field>
+			<dhss:sub-field zhName='Supported CAMEL Phase By VLR' path='/objects/hlr/vlrMobData/supportedCAMELPhaseByVLR'></dhss:sub-field>
+			<dhss:sub-field zhName='Supported MAP Version For LUP' path='/objects/hlr/vlrMobData/supportedMAPVersionForLUP'></dhss:sub-field>
+			<dhss:sub-field zhName='Location Update CS Timestamp' path='/objects/hlr/vlrMobData/locUpdateCSTimestamp'></dhss:sub-field>
+		</dhss:field>
+		<dhss:field zhName='SGSN Mobile Data'>
+			<dhss:sub-field zhName='MS Purged by SGSN' path='/objects/hlr/sgsnMobData/msPurged'></dhss:sub-field>
+			<dhss:sub-field zhName='SGSN number' path='/objects/hlr/sgsnMobData/isdnNumberOfSGSN'></dhss:sub-field>
+			<dhss:sub-field zhName='SGSN Ext Qos' path='/objects/hlr/sgsnMobData/sgsnExtQos'></dhss:sub-field>
+			<dhss:sub-field zhName='SGSN Id Valid' path='/objects/hlr/sgsnMobData/sgsnIdValid'></dhss:sub-field>
+			<dhss:sub-field zhName='PLMN Allowed' path='/objects/hlr/sgsnMobData/plmnAllowed'></dhss:sub-field>
+			<dhss:sub-field zhName='GPRS Allowed' path='/objects/hlr/sgsnMobData/gprsAllowed'></dhss:sub-field>
+			<dhss:sub-field zhName='SGSN Camel Not' path='/objects/hlr/sgsnMobData/sgsnCamelNot'></dhss:sub-field>
+			<dhss:sub-field zhName='Location Update PS Timestamp' path='/objects/hlr/sgsnMobData/locUpdatePSTimestamp'></dhss:sub-field>
+			<dhss:sub-field zhName='SGSN Area Rest Rcvd' path='/objects/hlr/sgsnMobData/sgsnAreaRestRcvd'></dhss:sub-field>
+			<dhss:sub-field zhName='Roaming Area Allowed' path='/objects/hlr/sgsnMobData/roamingAreaAllowed'></dhss:sub-field>
+			<dhss:sub-field zhName='Supported CAMEL Phase By SGSN' path='/objects/hlr/sgsnMobData/supportedCAMELPhaseBySGSN'></dhss:sub-field>
+			<dhss:sub-field zhName='Supported MAP Version for LUP' path='/objects/hlr/sgsnMobData/supportedMAPVersionForLUP'></dhss:sub-field>
+			<dhss:sub-field zhName='Features Not Supported By SGSN' path='/objects/hlr/sgsnMobData/featuresNotSupportedBySGSN'></dhss:sub-field>
+		</dhss:field>
+	</dhss:tab>
+	
+	
+		<!-- tab 10 -->
+		
+  <dhss:tab tabName='VoLTE' col='2' order='10'> 
+  
+			  <dhss:field zhName='HSS'  parentName='/objects/hss/publicUserId'>
+					  <dhss:sub-field zhName='Subscription Id' path='/objects/hss/subscriptionId'></dhss:sub-field>
+						<dhss:sub-field zhName='Profile Type' path='/objects/hss/profileType' ></dhss:sub-field>
+						<dhss:sub-field zhName='Admin Blocked' path='/objects/hss/adminBlocked' ></dhss:sub-field>
+					  <dhss:sub-field zhName='Default Scscf Required' path='/objects/hss/defaultScscfRequired' ></dhss:sub-field>
+						<dhss:sub-field zhName='Scscf Sip Address' path='/objects/hss/scscfSipAddress' ></dhss:sub-field>
+						<dhss:sub-field zhName='Scscf Host' path='/objects/hss/scscfHost'></dhss:sub-field>
+						<dhss:sub-field zhName='Scscf Destination Realm' path='/objects/hss/scscfDestinationRealm' ></dhss:sub-field>				
+						<dhss:sub-field zhName='Shared IFC Support' path='/objects/hss/sharedIFCSupport'></dhss:sub-field>
+						<dhss:sub-field zhName='Maximum Public Ids' path='/objects/hss/maximumPublicIds'></dhss:sub-field>
+				</dhss:field>	
+					
+				<dhss:field zhName='Implicit Registered Set'>
+						<dhss:sub-field zhName='IRS Id' path='/objects/hss/implicitRegisteredSet/irsId' ></dhss:sub-field>	
+						<dhss:sub-field zhName='Registration Status' path='/objects/hss/implicitRegisteredSet/registrationStatus' ></dhss:sub-field>
+						<dhss:sub-field zhName='Authentication Pending' path='/objects/hss/implicitRegisteredSet/authenticationPending' ></dhss:sub-field>
+						<dhss:sub-field zhName='Provisioned PrivateId' path='/objects/hss/implicitRegisteredSet/provisionedPrivateId' ></dhss:sub-field>
+				</dhss:field>		
+						
+				<dhss:field zhName='Private User Id'>
+			 			<dhss:sub-field zhName='Private User Id' path='/objects/hss/privateUserId/privateUserId'></dhss:sub-field>
+						<dhss:sub-field zhName='Provisioned IMSI' path='/objects/hss/privateUserId/provisionedImsi/provisionedImsi' ></dhss:sub-field>
+						<dhss:sub-field zhName='MSISDN' path='/objects/hss/privateUserId/msisdn' ></dhss:sub-field>
+						<dhss:sub-field zhName='HTTP Digest Key Version' path='/objects/hss/privateUserId/httpDigestKeyVersion' ></dhss:sub-field>
+			 			<dhss:sub-field zhName='Used Authentication Scheme' path='/objects/hss/privateUserId/usedAuthenticationScheme' ></dhss:sub-field>
+						<dhss:sub-field zhName='Act As VLR' path='/objects/hss/privateUserId/actAsVLR'></dhss:sub-field>
+						<dhss:sub-field zhName='Preferred Domain' path='/objects/hss/privateUserId/preferredDomain' ></dhss:sub-field>
+						<dhss:sub-field zhName='Loose Routing Indication Required' path='/objects/hss/privateUserId/looseRoutingIndicationRequired' ></dhss:sub-field>
+				</dhss:field>
+
+				<dhss:field zhName='Public User Id' parentName='/objects/hss/publicUserId' isArray='true'>
+						<dhss:sub-field zhName='Public User Id                     _' path='/objects/hss/publicUserId/publicUserId' ></dhss:sub-field>
+						<dhss:sub-field zhName='Original Public User Id            _' path='/objects/hss/publicUserId/originalPublicUserId'></dhss:sub-field>
+						<dhss:sub-field zhName='Barring Indication' path='/objects/hss/publicUserId/barringIndication'></dhss:sub-field>
+						<dhss:sub-field zhName='Default Indication' path='/objects/hss/publicUserId/defaultIndication'></dhss:sub-field>
+						<dhss:sub-field zhName='IRS   Id' path='/objects/hss/publicUserId/irsId'></dhss:sub-field>
+						<dhss:sub-field zhName='Display Name Privacy' path='/objects/hss/publicUserId/displayNamePrivacy'></dhss:sub-field>
+						<dhss:sub-field zhName='Alias Id' path='/objects/hss/publicUserId/aliasId'></dhss:sub-field>
+						<dhss:sub-field zhName='Is Child IMPU' path='/objects/hss/publicUserId/isChildIMPU'></dhss:sub-field>					
+				</dhss:field>
+				
+				<dhss:field zhName='Service Profile'>
+						<dhss:sub-field zhName='Profile Name' path='/objects/hss/serviceProfile/profileName'></dhss:sub-field>
+						<dhss:sub-field zhName='Subscribed Media Profile Session Release Policy' path='/objects/hss/serviceProfile/subscribedMediaProfileID/sessionReleasePolicy' />
+						<dhss:sub-field zhName='Subscribed Media Profile Forking Policy' path='/objects/hss/serviceProfile/subscribedMediaProfileID/forkingPolicy' />
+				</dhss:field>	
+
+				<dhss:field zhName='Mandatory Capability' parentName='/objects/hss/serviceProfile/mandatoryCapability' isArray='true'>
+						<dhss:sub-field zhName='Mandatory Capability' path='/objects/hss/serviceProfile/mandatoryCapability/mandatoryCapability'></dhss:sub-field>
+				</dhss:field>	
+				
+				<dhss:field zhName='global Filter Id' parentName='/objects/hss/serviceProfile/globalFilterId'  isArray='true'>
+						<dhss:sub-field zhName='global Filter Id' path='/objects/hss/serviceProfile/globalFilterId/globalFilterId'></dhss:sub-field>	
+				</dhss:field>		
+				
+				<dhss:field zhName='SIP-Basic-Data' path='/objects/hss/repositoryData/asData' />
+				
+					
+		</dhss:tab>
+	
+</dhss:subscriber-data-parse-rule>

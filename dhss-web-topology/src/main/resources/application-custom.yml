@@ -1,0 +1,7 @@
+spring:
+  dhss:
+    pingCmd: /bin/ping -c 4
+    security:
+      base-url: http://app.system-manager.ices.io:8088/systeManager
+      resource-url: /ssoGetAppSource?token={token}&assocResourceFlag={assocResourceFlag}&assocResourceAttr={assocResourceAttr}&assocResourceAttrValue={assocResourceAttrValue}&resourceFlag={resourceFlag}&contentFlag={contentFlag}
+      no-perssion-resource-url: /ssoGetAppSourceByNoPerssion?token={token}&resourceFlag={resourceFlag}&contentFlag={contentFlag}

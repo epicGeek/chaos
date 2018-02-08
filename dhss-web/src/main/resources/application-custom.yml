@@ -1,0 +1,31 @@
+spring:
+  dhss:
+    security:
+      remote-base-url: http://app.system-manager.ices.io:8088/systeManager
+      proviceName: beijing
+      cityName: beijing
+      serviceName: cmcc
+      projectName: dhss
+    subscriber:
+      mmlIp: 111.222.206.216
+      mmlPort: 9091
+      mmlProtocol: TELNET
+      mmlUserName: pingtai
+      mmlUserPwd: pingtai
+      ifDynamicGetIp: true
+      EditVrlOrSgsnServerPort: 7777
+      EditVrlOrSgsnUserName: jzwhpt
+      EditVrlOrSgsnPassWord: Nsn1234!
+      soapIpList: 
+        - 11111
+        - 22222
+  jackson:
+    time-zone: Asia/Shanghai
+dhss:
+  kpi:
+    show-more-grains: true
+    no-count-data-kpi-code-set:
+      - hssf_5010a
+      - hlrf_242a
+      - nds_1a   
+    

@@ -1,0 +1,8 @@
+debug: true
+spring:
+  profiles: development
+  datasource:
+      driver-class-name: org.mariadb.jdbc.Driver
+      url: jdbc:mysql://172.16.73.50:3306/dhss?characterEncoding=UTF-8&useSSL=false
+      username: root
+      password: root

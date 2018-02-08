@@ -1,0 +1,18 @@
+spring:
+   datasource:
+     driver-class-name: org.mariadb.jdbc.Driver
+     url: jdbc:mysql://database.dhss.ices.io:3306/pgw_log?characterEncoding=UTF-8
+     #url: jdbc:mysql://localhost:3306/dhss?characterEncoding=UTF-8
+     username: root
+     password: root
+   dhss:
+    pgw:
+      mmc: 46
+      country-code: 86
+      not-standard-country-code: '09'
+      search-log-mode: true
+server:
+  port: 8090
+  context-path: /pgw
+# logging:
+  # config: log4j2-spring.xml
