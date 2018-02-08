@@ -1,0 +1,52 @@
+dhss:
+  boss:
+    login-info-list:
+      - soap-gw-name: soap49
+        password: nsn1234!
+        user-name: oamsys
+        soapgw-ip: 172.16.73.49
+      - soap-gw-name: soap50
+        password: nsn1234!
+        user-name: oamsys
+        soapgw-ip: 172.16.73.50
+      - soap-gw-name: soap51
+        password: nsn1234!
+        user-name: oamsys
+        soapgw-ip: 172.16.73.51
+      - soap-gw-name: soap52
+        password: nsn1234!
+        user-name: oamsys
+        soapgw-ip: 172.16.73.52
+    el-search-config:
+        elastic-search-port: 9200
+        elastic-search-host: 172.16.73.50
+        mock-index: boss-log
+        soap-type: doc
+        mock-batch: 10000
+    default-config:
+        use-default-user: false
+        default-user: oamsys
+        defaul-password: nsn1234!
+        hlrsn-transform: true
+        boss-version: chinamobile
+        default-boss-version:      
+        rule-file-abs-soap-path: /home/soap-gw/boss_revolution/pattern_soap.rule
+        rule-file-abs-err-path: /home/soap-gw/boss_revolution/pattern_err.rule
+        cache-data-dir: /home/soap-gw/boss_revolution/cache/
+        load-file-dir: /home/soap-gw/boss_revolution/loader/
+        rsync-data-dir: /home/soap-gw/boss_revolution/rsync-data/
+        data-path: /home/soap-gw/boss_revolution/soapData.yml
+        save-ignore-data-day: 30
+        rsync-cmd: sshpass -p {0} rsync --include-from={1} --exclude-from={2} --delete -ave "ssh" {3}@{4}:/var/log/NPM/ {5}
+        save-days: 365
+spring:
+   activemq:
+       broker-url: failover:(tcp://activemq.dhss.ices.io:61616)?startupMaxReconnectAttempts=30&maxReconnectAttempts=3
+       pool:
+           enabled: false
+           max-connections: 20
+taskpool:
+  core-pool-size: 4
+  max-pool-size: 10
+  keep-alive-seconds: 10
+  queue-capacity: 10
